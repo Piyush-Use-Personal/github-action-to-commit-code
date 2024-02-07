@@ -1,4 +1,4 @@
-```
+
 # Github action to make code commits
 
 ## Description
@@ -33,4 +33,4 @@ This project implements a GitHub Action workflow that automatically runs ESLint 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
-```
+
