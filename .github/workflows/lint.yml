@@ -21,8 +21,8 @@ jobs:
         run: npm run lint:fix
       - name: Commit changes
         run: |
-          git config --global user.name 'action-user'
-          git config --global user.email 'action-user@example.com'
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
           git add .
           git commit -m "Fix linting issues"
       - name: Push changes
