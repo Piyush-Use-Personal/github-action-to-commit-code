@@ -17,15 +17,27 @@ jobs:
           node-version: '16' # Adjust Node.js version as needed
       - name: Install dependencies
         run: npm install
+      - name: Check for JS file changes
+        id: js-files-changed
+        run: |
+          git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '\.js$' || exit 1
       - name: Lint and fix
+        if: steps.js-files-changed.outputs.return-code == '0'
         run: npm run lint:fix
+      - name: Check for changes
+        if: steps.js-files-changed.outputs.return-code == '0'
+        id: git-check
+        run: |
+          git diff --exit-code || exit 0
       - name: Commit changes
+        if: steps.js-files-changed.outputs.return-code == '0' && steps.git-check.outputs.return-code == '0'
         run: |
           git config --global user.name 'action-user'
           git config --global user.email 'action-user@example.com'
           git add .
           git commit -m "Fix linting issues"
       - name: Push changes
+        if: steps.js-files-changed.outputs.return-code == '0' && steps.git-check.outputs.return-code == '0'
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
